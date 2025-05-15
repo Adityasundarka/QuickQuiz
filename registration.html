@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quick Quiz | Login / Signup</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #00c9ff, #92fe9d);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      background: #fff;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 400px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #333;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 12px 15px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #2575fc;
+    }
+
+    button {
+      background-color: #2575fc;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+    }
+
+    button:hover {
+      background-color: #1a5ad9;
+    }
+
+    #photoPreview {
+      display: none;
+    }
+
+    .toggle {
+      text-align: center;
+      color: #2575fc;
+      margin-top: 15px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 id="formTitle">Signup</h2>
+    <form id="authForm">
+      <div id="signupFields">
+        <input type="text" id="name" placeholder="Full Name" />
+        <input type="tel" id="phone" placeholder="Phone Number" />
+        <select id="class">
+          <option value="">Select Class</option>
+          <option value="10">10</option>
+          <option value="12">12</option>
+          <option value="B.Tech">B.Tech</option>
+        </select>
+        <input type="file" id="photo" accept="image/*" />
+        <img id="photoPreview" src="#" />
+      </div>
+
+      <input type="email" id="email" placeholder="Email Address" required />
+      <input type="password" id="password" placeholder="Password" required />
+
+      <button type="submit" id="submitBtn">Signup</button>
+    </form>
+    <div class="toggle" onclick="toggleForm()">Already have an account? Login</div>
+  </div>
+
+  <script>
+    const form = document.getElementById('authForm');
+    const photoInput = document.getElementById('photo');
+    const photoPreview = document.getElementById('photoPreview');
+    const signupFields = document.getElementById('signupFields');
+    const formTitle = document.getElementById('formTitle');
+    const submitBtn = document.getElementById('submitBtn');
+    let isLogin = false;
+
+    // Toggle Login/Signup
+    function toggleForm() {
+      isLogin = !isLogin;
+      signupFields.style.display = isLogin ? 'none' : 'block';
+      formTitle.textContent = isLogin ? 'Login' : 'Signup';
+      submitBtn.textContent = isLogin ? 'Login' : 'Signup';
+      document.querySelector('.toggle').textContent =
+        isLogin ? "Don't have an account? Signup" : "Already have an account? Login";
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const users = JSON.parse(localStorage.getItem('quizUsers')) || [];
+
+      if (isLogin) {
+        const user = users.find(u => u.email === email && u.password === password);
+        if (user) {
+          localStorage.setItem('currentUser', JSON.stringify(user));
+          alert('Login successful!');
+          window.location.href = 'index.html';
+        } else {
+          alert('Invalid email or password!');
+        }
+      } else {
+        const name = document.getElementById('name').value;
+        const phone = document.getElementById('phone').value;
+        const userClass = document.getElementById('class').value;
+
+        const existing = users.find(u => u.email === email);
+        if (existing) {
+          alert('User already exists with this email.');
+          return;
+        }
+
+        let photo = '';
+        if (photoInput.files.length > 0) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            photo = reader.result;
+            saveUser();
+          };
+          reader.readAsDataURL(photoInput.files[0]);
+        } else {
+          saveUser();
+        }
+
+        function saveUser() {
+          const newUser = { name, phone, email, class: userClass, password, photo };
+          users.push(newUser);
+          localStorage.setItem('quizUsers', JSON.stringify(users));
+          localStorage.setItem('currentUser', JSON.stringify(newUser));
+          alert('Signup successful!');
+          window.location.href = 'index.html';
+        }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quick Quiz Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #00c9ff, #92fe9d);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #fff;
+      text-align: center;
+    }
+
+    .dashboard {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      width: 90%;
+      max-width: 400px;
+    }
+
+    .dashboard img {
+      height: 100px;
+      width: 100px;
+      border-radius: 50%;
+      margin-bottom: 20px;
+      object-fit: cover;
+      border: 3px solid #fff;
+    }
+
+    .dashboard h2 {
+      margin: 10px 0;
+      font-size: 24px;
+    }
+
+    .dashboard button {
+      background: #fff;
+      color: #657aff;
+      padding: 12px 25px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    .dashboard button:hover {
+      background: #ffe3ec;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard" id="dashboard">
+    <!-- User info will be inserted here -->
+  </div>
+
+  <script>
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+    if (!currentUser) {
+      alert("Please login first!");
+      window.location.href = "registration.html";
+    } else {
+      const dashboard = document.getElementById("dashboard");
+      dashboard.innerHTML = `
+        <img src="${currentUser.photo || 'https://via.placeholder.com/100'}" alt="User Photo" />
+        <h2>Welcome, ${currentUser.name}</h2>
+        <p>Class: ${currentUser.class || 'Not set'}</p>
+        <button onclick="startQuiz()">Start Quiz</button>
+      `;
+    }
+
+    function startQuiz() {
+      // redirect to your actual quiz.html or main quiz page
+      window.location.href = "game.html"; 
+    }
+  </script>
+  <script>
+  const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+
+  const tableBody = document.querySelector('#highScoresTable tbody');
+
+  // Sort all scores in descending order and display all (not limited to top 5)
+  highScores
+    .sort((a, b) => b.score - a.score)
+    .forEach((entry, index) => {
+      const row = document.createElement('tr');
+      const today = entry.date || new Date().toLocaleDateString();
+
+      row.innerHTML = `
+        <td data-label="Rank">#${index + 1}</td>
+        <td data-label="Photo"><img src="${entry.photo || 'https://via.placeholder.com/45'}" alt="Profile" /></td>
+        <td data-label="Name">${entry.name}</td>
+        <td data-label="Score">${entry.score}</td>
+        <td data-label="Date">${today}</td>
+      `;
+
+      tableBody.appendChild(row);
+    });
+</script>
+
+</body>
+</html>

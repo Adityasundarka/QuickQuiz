@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quiz Result</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #00c9ff, #92fe9d);
+      font-family: 'Montserrat', sans-serif;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    .container {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+      width: 90%;
+      max-width: 400px;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    input {
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      width: 100%;
+      margin-bottom: 15px;
+      font-size: 16px;
+    }
+
+    button {
+      background: #fff;
+      color: #8a62d9;
+      font-weight: bold;
+      padding: 12px 20px;
+      margin: 10px 5px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background: #ffe3ec;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Quiz Completed!</h1>
+    <h2>Your Score: <span id="finalScore">0</span></h2>
+
+    <input type="text" id="username" placeholder="Enter your name to save score" />
+    <button id="saveScoreBtn">Save Score</button>
+
+    <div class="btn-group">
+      <button onclick="playAgain()">Play Again</button>
+      <button onclick="goHome()">Home</button>
+      <button onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <script>
+    const finalScore = localStorage.getItem("mostRecentScore");
+    document.getElementById("finalScore").innerText = finalScore;
+
+    const saveBtn = document.getElementById("saveScoreBtn");
+    const usernameInput = document.getElementById("username");
+
+    saveBtn.addEventListener("click", () => {
+      const username = usernameInput.value.trim();
+      if (!username) {
+        alert("Please enter your name");
+        return;
+      }
+
+      const highScores = JSON.parse(localStorage.getItem("highScores")) || [];
+      const score = {
+        name: username,
+        score: finalScore
+      };
+
+      highScores.push(score);
+      highScores.sort((a, b) => b.score - a.score);
+      highScores.splice(5); // top 5
+
+      localStorage.setItem("highScores", JSON.stringify(highScores));
+
+      alert("Score Saved!");
+      window.location.href = "highscores.html";
+    });
+
+    function playAgain() {
+      window.location.href = "game.html";
+    }
+
+    function goHome() {
+      window.location.href = "index.html";
+    }
+
+    function logout() {
+      localStorage.removeItem("currentUser");
+      window.location.href = "registration.html";
+    }
+  </script>
+</body>
+</html>
