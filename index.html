@@ -2,116 +2,77 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Quick Quiz Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quick Quiz</title>
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Montserrat', sans-serif;
-    }
-
     body {
       margin: 0;
-      padding: 0;
-      background: linear-gradient(to right, #00c9ff, #92fe9d);
+      background: linear-gradient(to right, #00c9ff, #00B894);
+      color: white;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      color: #fff;
-      text-align: center;
+      overflow: hidden;
     }
 
-    .dashboard {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 40px;
-      border-radius: 15px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-      width: 90%;
-      max-width: 400px;
+    .logo {
+      display: flex;
+      font-size: 4rem;
+      font-weight: 900;
+      gap: 6px;
+      letter-spacing: 2px;
+      opacity: 1;
+      transition: opacity 1s ease, transform 1s ease;
     }
 
-    .dashboard img {
-      height: 100px;
-      width: 100px;
-      border-radius: 50%;
-      margin-bottom: 20px;
-      object-fit: cover;
-      border: 3px solid #fff;
+    .logo span {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: showUp 0.5s forwards;
     }
 
-    .dashboard h2 {
-      margin: 10px 0;
-      font-size: 24px;
+    .logo span:nth-child(1) { animation-delay: 0.1s; }
+    .logo span:nth-child(2) { animation-delay: 0.2s; }
+    .logo span:nth-child(3) { animation-delay: 0.3s; }
+    .logo span:nth-child(4) { animation-delay: 0.4s; }
+    .logo span:nth-child(5) { animation-delay: 0.5s; }
+    .logo span:nth-child(6) { animation-delay: 0.6s; }
+    .logo span:nth-child(7) { animation-delay: 0.7s; }
+    .logo span:nth-child(8) { animation-delay: 0.8s; }
+    .logo span:nth-child(9) { animation-delay: 0.9s; }
+    .logo span:nth-child(10) { animation-delay: 1s; }
+
+    @keyframes showUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
-    .dashboard button {
-      background: #fff;
-      color: #657aff;
-      padding: 12px 25px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-      margin-top: 20px;
-    }
-
-    .dashboard button:hover {
-      background: #ffe3ec;
+    .fade-out {
+      opacity: 0;
+      transform: scale(0.95);
     }
   </style>
 </head>
 <body>
-  <div class="dashboard" id="dashboard">
-    <!-- User info will be inserted here -->
+  <div class="logo" id="logoText">
+    <span>Q</span><span>u</span><span>i</span><span>c</span><span>k</span>
+    <span>&nbsp;</span>
+    <span>Q</span><span>u</span><span>i</span><span>z</span>
   </div>
 
   <script>
-    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    setTimeout(() => {
+      const logo = document.getElementById('logoText');
+      logo.classList.add('fade-out');
 
-    if (!currentUser) {
-      alert("Please login first!");
-      window.location.href = "registration.html";
-    } else {
-      const dashboard = document.getElementById("dashboard");
-      dashboard.innerHTML = `
-        <img src="${currentUser.photo || 'https://via.placeholder.com/100'}" alt="User Photo" />
-        <h2>Welcome, ${currentUser.name}</h2>
-        <p>Class: ${currentUser.class || 'Not set'}</p>
-        <button onclick="startQuiz()">Start Quiz</button>
-      `;
-    }
-
-    function startQuiz() {
-      // redirect to your actual quiz.html or main quiz page
-      window.location.href = "game.html"; 
-    }
+      setTimeout(() => {
+        window.location.href = "registration.html";
+      }, 800);
+    }, 3000);
   </script>
-  <script>
-  const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
-
-  const tableBody = document.querySelector('#highScoresTable tbody');
-
-  // Sort all scores in descending order and display all (not limited to top 5)
-  highScores
-    .sort((a, b) => b.score - a.score)
-    .forEach((entry, index) => {
-      const row = document.createElement('tr');
-      const today = entry.date || new Date().toLocaleDateString();
-
-      row.innerHTML = `
-        <td data-label="Rank">#${index + 1}</td>
-        <td data-label="Photo"><img src="${entry.photo || 'https://via.placeholder.com/45'}" alt="Profile" /></td>
-        <td data-label="Name">${entry.name}</td>
-        <td data-label="Score">${entry.score}</td>
-        <td data-label="Date">${today}</td>
-      `;
-
-      tableBody.appendChild(row);
-    });
-</script>
-
 </body>
 </html>
