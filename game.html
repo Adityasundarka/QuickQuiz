@@ -69,18 +69,22 @@
     <script src="game.js"></script>
 
     <script>
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+const currentUser = JSON.parse(localStorage.getItem("currentUser")) || null;
 
-  if (!currentUser) {
-    alert("You must login first!");
-    window.location.href = "registration.html";
-  } else {
-    window.addEventListener("DOMContentLoaded", () => {
-      document.getElementById("userPhoto").src = currentUser.photo;
-      document.getElementById("userName").textContent = `Welcome, ${currentUser.name}`;
-    });
+window.addEventListener("DOMContentLoaded", () => {
+  if (currentUser) {
+    const photoEl = document.getElementById("userPhoto");
+    const nameEl = document.getElementById("userName");
+
+    if (photoEl && currentUser.photo) {
+      photoEl.src = currentUser.photo;
+    }
+
+    if (nameEl && currentUser.name) {
+      nameEl.textContent = `Welcome, ${currentUser.name}`;
+    }
   }
-  
+});
 </script>
 
   </body>
