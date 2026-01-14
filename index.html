@@ -65,14 +65,13 @@
   </div>
 
   <script>
-    setTimeout(() => {
-      const logo = document.getElementById('logoText');
-      logo.classList.add('fade-out');
+setTimeout(() => { const logo = document.getElementById('logoText'); 
+logo.classList.add('fade-out');
+ setTimeout(() => {
+   window.location.href = "game.html"; },
+  800); }, 
+  3000);
 
-      setTimeout(() => {
-        window.location.href = "registration.html";
-      }, 800);
-    }, 3000);
   </script>
 </body>
 </html>
