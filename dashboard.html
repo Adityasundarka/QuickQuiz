@@ -69,12 +69,33 @@
   </div>
 
   <script>
-    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  const dashboard = document.getElementById("dashboard");
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
-    if (!currentUser) {
-      alert("Please login first!");
-      window.location.href = "registration.html";
-    } else {
+  if (!currentUser) {
+    dashboard.innerHTML = `
+      <h2>Welcome, Guest 👋</h2>
+      <p>Login is optional</p>
+      <button onclick="startQuiz()">Start Quiz</button>
+      <br><br>
+      <button onclick="login()">Login</button>
+    `;
+  } else {
+    dashboard.innerHTML = `
+      <h2>Welcome, ${currentUser.name}</h2>
+      <button onclick="startQuiz()">Start Quiz</button>
+    `;
+  }
+
+  function startQuiz() {
+    window.location.href = "game.html";
+  }
+
+  function login() {
+    window.location.href = "registration.html";
+  }
+</script>
+else {
       const dashboard = document.getElementById("dashboard");
       dashboard.innerHTML = `
         <img src="${currentUser.photo || 'https://via.placeholder.com/100'}" alt="User Photo" />
